@@ -1,26 +1,26 @@
 // implement your API here
-
 const express = require('express');
 
 const server = express();
 const db = require('./data/db')
 
-app.use(express.json())
+server.use(express.json())
 
-server.get('/api/users', (res, req) => {
+server.get('/api/users', (req, res) => {
     db.find()
         .then(user => {
             res.status(200).json(user)
         })
         .catch(error => {
             res.status(500).json({ success: false, error })
+
         })
 })
 
-server.post('/api/users', (res, req) => {
+server.post('/api/users', (req, res) => {
     const { name, bio } = req.body
 
-    db.insert(name, bio)
+    db.insert(req.body)
         .then(user => {
             res.status(201).json({ success: true, user })
         })
@@ -30,7 +30,7 @@ server.post('/api/users', (res, req) => {
         })
 })
 
-server.get('/api/users/:id', (res, req) => {
+server.get('/api/users/:id', (req, res) => {
     db.findById(req.params.id)
         .then(user => {
             if (user) {
@@ -44,10 +44,9 @@ server.get('/api/users/:id', (res, req) => {
         .catch(error => {
             res.status(500).json({ success: false, error })
         })
-
 })
 
-server.put('/api/users', (res, req) => {
+server.put('/api/users', (req, res) => {
     const { id } = req.params.id
     const changes = req.body
     db.update(id, changes)
@@ -64,7 +63,7 @@ server.put('/api/users', (res, req) => {
         })
 })
 
-server.delete('/api/users', (res, req) => {
+server.delete('/api/users/:id', (req, res) => {
     const { id } = req.params
     db.remove(id)
         .then(deleted => {
@@ -82,6 +81,6 @@ server.delete('/api/users', (res, req) => {
 
 
 server.listen(process.env.PORT || 3000, () => {
-    console.log('LIstening on' + process.env.PORT || 3000)
+    console.log('Listening on ' + (process.env.PORT || 3000))
 })
 

@@ -46,8 +46,8 @@ server.get('/api/users/:id', (req, res) => {
         })
 })
 
-server.put('/api/users', (req, res) => {
-    const { id } = req.params.id
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params
     const changes = req.body
     db.update(id, changes)
         .then(updated => {
